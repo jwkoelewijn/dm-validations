@@ -103,3 +103,17 @@ describe 'DataMapper::Resource' do
     end
   end
 end
+
+describe '#save!' do
+  it "should not call valid when save! is used" do
+    bill = DataMapper::Validations::Fixtures::Bill.new()
+    bill.save.should be_true
+
+    bill_correction = DataMapper::Validations::Fixtures::BillCorrection.build_from(bill)
+
+    # bill_correction.save will call save! on @bill
+    bill_correction.save.should be_true
+
+    bill.valid_hook_call_count.should == 1
+  end
+end
